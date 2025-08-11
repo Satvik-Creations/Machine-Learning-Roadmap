@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Learning Roadmap Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pulse-dot {
+            width: 12px;
+            height: 12px;
+            background: #3b82f6;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .progress-bar {
+            width: 256px;
+            height: 12px;
+            background: #374151;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            transition: width 0.5s ease;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .phase-nav {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+
+        .phase-nav-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .phase-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .phase-item {
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #374151;
+        }
+
+        .phase-item:hover {
+            background: #4b5563;
+        }
+
+        .phase-item.selected {
+            background: linear-gradient(to right, #2563eb, #7c3aed);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+            transform: scale(1.05);
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-icon {
+            padding: 0.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phase-info h3 {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .phase-info p {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+        }
+
+        .phase-progress {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+        }
+
+        .phase-progress span {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .mini-progress {
+            width: 64px;
+            height: 4px;
+            background: #4b5563;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .practice-section {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: linear-gradient(to right, #166534, #1e40af);
+            border-radius: 8px;
+        }
+
+        .practice-section h3 {
+            font-weight: bold;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .practice-list {
+            font-size: 0.75rem;
+            color: #e2e8f0;
+            line-height: 1.4;
+        }
+
+        .practice-tip {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #86efac;
+        }
+
+        .phase-details {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .phase-details-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .phase-details-icon {
+            padding: 0.75rem;
+            border-radius: 12px;
+        }
+
+        .phase-details-info h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .phase-details-info .duration {
+            color: #cbd5e1;
+        }
+
+        .phase-details-info .goal {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-top: 0.25rem;
+        }
+
+        .topics-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .topics-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .topic-item {
+            background: #374151;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .topic-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .topic-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .topic-title h4 {
+            font-weight: 600;
+        }
+
+        .chevron {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.2s ease;
+        }
+
+        .chevron.expanded {
+            transform: rotate(90deg);
+        }
+
+        .complete-btn {
+            padding: 0.25rem;
+            border: none;
+            background: none;
+            color: #94a3b8;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: color 0.2s ease;
+        }
+
+        .complete-btn:hover {
+            color: #cbd5e1;
+        }
+
+        .complete-btn.completed {
+            color: #4ade80;
+        }
+
+        .subtopics {
+            margin-top: 0.75rem;
+            margin-left: 1.75rem;
+            display: none;
+        }
+
+        .subtopics.expanded {
+            display: block;
+        }
+
+        .subtopic {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: #cbd5e1;
+        }
+
+        .subtopic-dot {
+            width: 4px;
+            height: 4px;
+            background: #6b7280;
+            border-radius: 50%;
+            margin-top: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .milestone-section {
+            background: linear-gradient(to right, #92400e, #ea580c);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .milestone-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .milestone-title {
+            font-weight: 600;
+            color: #fcd34d;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .milestone-text {
+            font-size: 0.875rem;
+            color: #e2e8f0;
+        }
+
+        .milestone-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .milestone-btn.completed {
+            background: #16a34a;
+            color: white;
+        }
+
+        .milestone-btn:not(.completed) {
+            background: #4b5563;
+            color: #cbd5e1;
+        }
+
+        .milestone-btn:not(.completed):hover {
+            background: #6b7280;
+        }
+
+        .phase-progress-summary {
+            padding: 1rem;
+            background: #374151;
+            border-radius: 8px;
+        }
+
+        .phase-progress-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #4b5563;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .phase-progress-fill {
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 0.5s ease;
+        }
+
+        /* Color classes */
+        .bg-blue-500 { background: #3b82f6; }
+        .bg-green-500 { background: #10b981; }
+        .bg-purple-500 { background: #8b5cf6; }
+        .bg-red-500 { background: #ef4444; }
+        .bg-yellow-500 { background: #eab308; }
+        .bg-indigo-500 { background: #6366f1; }
+
+        /* Icons */
+        .icon {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .icon-sm {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .icon-xs {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="title">ML Learning Roadmap Dashboard</h1>
+            <div class="progress-container">
+                <div class="progress-indicator">
+                    <div class="pulse-dot"></div>
+                    <span>Overall Progress: <span id="overall-progress">0</span>%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="overall-progress-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- Phase Navigation -->
+            <div class="phase-nav">
+                <h2 class="phase-nav-title">
+                    <svg class="icon-sm" viewBox="0 0 24 24">
+                        <path d="M8 2v3m8-3v3m-9 8h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                    Learning Phases
+                </h2>
+                <div class="phase-list" id="phase-list">
+                    <!-- Phase items will be populated by JavaScript -->
+                </div>
+
+                <!-- Practice & Portfolio Section -->
+                <div class="practice-section">
+                    <h3>Practice & Portfolio</h3>
+                    <div class="practice-list">
+                        • Kaggle Competitions<br>
+                        • GitHub Portfolio<br>
+                        • Blog/LinkedIn Posts
+                    </div>
+                    <div class="practice-tip">
+                        💡 Learn → Build → Share
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase Details -->
+            <div class="phase-details" id="phase-details">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // SVG Icons
+        const icons = {
+            code: `<svg class="icon" viewBox="0 0 24 24"><path d="m18 16 4-4-4-4m-6 8-4-4 4-4"/></svg>`,
+            target: `<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`,
+            brain: `<svg class="icon" viewBox="0 0 24 24"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"/><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/><path d="M3.477 10.896a4 4 0 0 1 .585-.396"/><path d="M19.938 10.5a4 4 0 0 1 .585.396"/><path d="M6 18a4 4 0 0 1-1.967-.516"/><path d="M19.967 17.484A4 4 0 0 1 18 18"/></svg>`,
+            rocket: `<svg class="icon" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>`,
+            star: `<svg class="icon" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>`,
+            trophy: `<svg class="icon" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55.47.98.97 1.21C12.01 18.75 13 19.24 14 20s2.24 1.32 3.5.8 1.21-2.24.8-3.5c-.59-1.82-2.06-3.5-2.5-4-.68-.68-1.68-1.68-2.5-2.5a12.86 12.86 0 0 1-2.24-5.65c-.42-2.24-.97-4.5-2.56-5.65"/><path d="M14 14.66V17c0 .55-.47.98-.97 1.21C11.99 18.75 11 19.24 10 20s-2.24 1.32-3.5.8-1.21-2.24-.8-3.5c.59-1.82 2.06-3.5 2.5-4 .68-.68 1.68-1.68 2.5-2.5a12.86 12.86 0 0 0 2.24-5.65c.42-2.24.97-4.5 2.56-5.65"/></svg>`,
+            book: `<svg class="icon-sm" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>`,
+            chevronRight: `<svg class="icon-xs chevron" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>`,
+            chevronDown: `<svg class="icon-xs chevron expanded" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>`,
+            circle: `<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>`,
+            checkCircle: `<svg class="icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>`
+        };
+
+        // Roadmap data
+        let roadmapData = {
+            phase1: {
+                title: "Programming & Math Foundations",
+                duration: "1–2 months",
+                goal: "Build the minimum foundation for ML",
+                color: "bg-blue-500",
+                icon: "code",
+                topics: [
+                    {
+                        name: "Python Basics",
+                        completed: false,
+                        subtopics: ["Variables, Data types, Operators", "Conditional Statements, Loops", "Functions, Modules", "Lists, Tuples, Dictionaries, Sets", "File Handling", "Exception Handling", "Libraries: NumPy, Pandas, Matplotlib"]
+                    },
+                    {
+                        name: "Mathematics for ML",
+                        completed: false,
+                        subtopics: ["Linear Algebra: Vectors, Matrices, Matrix operations", "Probability & Statistics: Mean, Median, Mode, Variance, Probability basics, Bayes theorem", "Calculus: Derivatives, Partial derivatives, Gradient concept", "Discrete Math (Optional): Combinatorics, Graphs"]
+                    }
+                ],
+                milestone: "Be able to manipulate datasets in Pandas & visualize them in Matplotlib.",
+                milestoneCompleted: false
+            },
+            phase2: {
+                title: "Data Handling & EDA",
+                duration: "1 month",
+                goal: "Learn how to clean, analyze, and understand data",
+                color: "bg-green-500",
+                icon: "target",
+                topics: [
+                    {
+                        name: "Core Data Skills",
+                        completed: false,
+                        subtopics: ["Data Cleaning (handling missing values, duplicates)", "Data Transformation (scaling, encoding categorical variables)", "Data Visualization (heatmaps, scatter plots, histograms)", "Feature Engineering", "Exploratory Data Analysis (EDA)"]
+                    },
+                    {
+                        name: "Libraries",
+                        completed: false,
+                        subtopics: ["Seaborn", "Plotly", "Scikit-learn (preprocessing)"]
+                    }
+                ],
+                milestone: "Take a Kaggle dataset and perform complete EDA.",
+                milestoneCompleted: false
+            },
+            phase3: {
+                title: "Machine Learning Core",
+                duration: "2–3 months",
+                goal: "Understand how ML models work & how to train them",
+                color: "bg-purple-500",
+                icon: "brain",
+                topics: [
+                    {
+                        name: "ML Concepts",
+                        completed: false,
+                        subtopics: ["Supervised vs Unsupervised Learning", "Overfitting, Underfitting, Bias-Variance Tradeoff", "Train/Test Split, Cross-validation", "Performance metrics (Accuracy, Precision, Recall, F1, ROC-AUC, RMSE, MAE)"]
+                    },
+                    {
+                        name: "Supervised Learning",
+                        completed: false,
+                        subtopics: ["Linear Regression, Logistic Regression", "Decision Trees, Random Forests", "K-Nearest Neighbors", "Support Vector Machines", "Gradient Boosting (XGBoost, LightGBM, CatBoost)"]
+                    },
+                    {
+                        name: "Unsupervised Learning",
+                        completed: false,
+                        subtopics: ["K-Means Clustering", "Hierarchical Clustering", "PCA (Dimensionality Reduction)"]
+                    },
+                    {
+                        name: "Others",
+                        completed: false,
+                        subtopics: ["Recommendation Systems (Collaborative Filtering, Content-based)"]
+                    }
+                ],
+                milestone: "Build and evaluate at least 5 ML projects on datasets from Kaggle/UCI.",
+                milestoneCompleted: false
+            },
+            phase4: {
+                title: "Deep Learning",
+                duration: "2–3 months",
+                goal: "Learn to work with Neural Networks",
+                color: "bg-red-500",
+                icon: "rocket",
+                topics: [
+                    {
+                        name: "Neural Network Basics",
+                        completed: false,
+                        subtopics: ["Perceptrons, Activation Functions", "Forward & Backward Propagation", "Loss Functions, Optimizers (SGD, Adam)", "Regularization (Dropout, BatchNorm)"]
+                    },
+                    {
+                        name: "Deep Learning Frameworks",
+                        completed: false,
+                        subtopics: ["TensorFlow & Keras or PyTorch", "Building Feedforward Networks", "Image Classification (CNNs)", "Text Classification (RNNs, LSTMs)"]
+                    },
+                    {
+                        name: "Advanced Topics",
+                        completed: false,
+                        subtopics: ["Transfer Learning", "Generative AI (GANs, VAEs)", "Transformers (BERT, GPT basics)"]
+                    }
+                ],
+                milestone: "Build an image classifier and a text classifier from scratch.",
+                milestoneCompleted: false
+            },
+            phase5: {
+                title: "MLOps & Deployment",
+                duration: "1–2 months",
+                goal: "Learn to deploy models for real use",
+                color: "bg-yellow-500",
+                icon: "star",
+                topics: [
+                    {
+                        name: "Deployment Skills",
+                        completed: false,
+                        subtopics: ["Model Saving (joblib, pickle)", "APIs for ML Models (Flask, FastAPI)", "Docker basics", "Cloud Platforms (AWS, GCP, Azure)", "Streamlit / Gradio for simple ML apps"]
+                    }
+                ],
+                milestone: "Deploy a small ML/DL app online.",
+                milestoneCompleted: false
+            },
+            phase6: {
+                title: "Specialization",
+                duration: "Optional, ongoing",
+                goal: "Choose based on career goal",
+                color: "bg-indigo-500",
+                icon: "trophy",
+                topics: [
+                    {
+                        name: "Specialization Areas",
+                        completed: false,
+                        subtopics: ["Computer Vision – YOLO, OpenCV, segmentation", "Natural Language Processing (NLP) – Transformers, Chatbots", "Reinforcement Learning – Q-learning, Deep Q-Networks", "Generative AI – Stable Diffusion, LLM fine-tuning"]
+                    }
+                ],
+                milestone: "Master your chosen specialization area.",
+                milestoneCompleted: false
+            }
+        };
+
+        let selectedPhase = 'phase1';
+        let expandedTopics = {};
+
+        function getPhaseProgress(phase) {
+            const totalItems = phase.topics.length + 1;
+            const completedItems = phase.topics.filter(t => t.completed).length + (phase.milestoneCompleted ? 1 : 0);
+            return Math.round((completedItems / totalItems) * 100);
+        }
+
+        function getOverallProgress() {
+            const phases = Object.values(roadmapData);
+            const totalProgress = phases.reduce((sum, phase) => sum + getPhaseProgress(phase), 0);
+            return Math.round(totalProgress / phases.length);
+        }
+
+        function updateOverallProgress() {
+            const progress = getOverallProgress();
+            document.getElementById('overall-progress').textContent = progress;
+            document.getElementById('overall-progress-bar').style.width = `${progress}%`;
+        }
+
+        function renderPhaseList() {
+            const phaseList = document.getElementById('phase-list');
+            phaseList.innerHTML = '';
+
+            Object.entries(roadmapData).forEach(([phaseId, phase]) => {
+                const progress = getPhaseProgress(phase);
+                const isSelected = selectedPhase === phaseId;
+                
+                const phaseItem = document.createElement('div');
+                phaseItem.className = `phase-item ${isSelected ? 'selected' : ''}`;
+                phaseItem.onclick = () => selectPhase(phaseId);
+                
+                phaseItem.innerHTML = `
+                    <div class="phase-header">
+                        <div class="phase-icon ${phase.color}">
+                            ${icons[phase.icon]}
+                        </div>
+                        <div class="phase-info">
+                            <h3>${phase.title}</h3>
+                            <p>${phase.duration}</p>
+                        </div>
+                    </div>
+                    <div class="phase-progress">
+                        <span>${progress}% complete</span>
+                        <div class="mini-progress">
+                            <div class="${phase.color}" style="width: ${progress}%; height: 100%; border-radius: 9999px; transition: width 0.5s ease;"></div>
+                        </div>
+                    </div>
+                `;
+                
+                phaseList.appendChild(phaseItem);
+            });
+        }
+
+        function renderPhaseDetails() {
+            const phaseDetails = document.getElementById('phase-details');
+            const phase = roadmapData[selectedPhase];
+            
+            phaseDetails.innerHTML = `
+                <div class="phase-details-header">
+                    <div class="phase-details-icon ${phase.color}">
+                        ${icons[phase.icon]}
+                    </div>
+                    <div class="phase-details-info">
+                        <h2>${phase.title}</h2>
+                        <p class="duration">${phase.duration}</p>
+                        <p class="goal">🎯 ${phase.goal}</p>
+                    </div>
+                </div>
+
+                <div class="topics-section">
+                    <h3 class="topics-title">
+                        ${icons.book}
+                        Topics to Learn
+                    </h3>
+                    
+                    <div id="topics-container">
+                        ${phase.topics.map((topic, index) => {
+                            const isExpanded = expandedTopics[`${selectedPhase}-${index}`];
+                            return `
+                                <div class="topic-item">
+                                    <div class="topic-header">
+                                        <div class="topic-title" onclick="toggleTopic('${selectedPhase}', ${index})">
+                                            ${isExpanded ? icons.chevronDown : icons.chevronRight}
+                                            <h4>${topic.name}</h4>
+                                        </div>
+                                        <button class="complete-btn ${topic.completed ? 'completed' : ''}" onclick="toggleTopicComplete('${selectedPhase}', ${index})">
+                                            ${topic.completed ? icons.checkCircle : icons.circle}
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="subtopics ${isExpanded ? 'expanded' : ''}">
+                                        ${topic.subtopics.map(subtopic => `
+                                            <div class="subtopic">
+                                                <div class="subtopic-dot"></div>
+                                                <span>${subtopic}</span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+
+                <div class="milestone-section">
+                    <div class="milestone-header">
+                        <div>
+                            <h4 class="milestone-title">
+                                ${icons.target}
+                                Milestone
+                            </h4>
+                            <p class="milestone-text">${phase.milestone}</p>
+                        </div>
+                        <button class="milestone-btn ${phase.milestoneCompleted ? 'completed' : ''}" onclick="toggleMilestone('${selectedPhase}')">
+                            ${phase.milestoneCompleted ? icons.checkCircle : icons.circle}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="phase-progress-summary">
+                    <div class="phase-progress-header">
+                        <span>Phase Progress</span>
+                        <span style="font-size: 1.125rem; font-weight: bold;">${getPhaseProgress(phase)}%</span>
+                    </div>
+                    <div class="phase-progress-bar">
+                        <div class="phase-progress-fill ${phase.color}" style="width: ${getPhaseProgress(phase)}%;"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectPhase(phaseId) {
+            selectedPhase = phaseId;
+            renderPhaseList();
+            renderPhaseDetails();
+        }
+
+        function toggleTopic(phaseId, topicIndex) {
+            const key = `${phaseId}-${topicIndex}`;
+            expandedTopics[key] = !expandedTopics[key];
+            renderPhaseDetails();
+        }
+
+        function toggleTopicComplete(phaseId, topicIndex) {
+            roadmapData[phaseId].topics[topicIndex].completed = !roadmapData[phaseId].topics[topicIndex].completed;
+            renderPhaseList();
+            renderPhaseDetails();
+            updateOverallProgress();
+        }
+
+        function toggleMilestone(phaseId) {
+            roadmapData[phaseId].milestoneCompleted = !roadmapData[phaseId].milestoneCompleted;
+            renderPhaseList();
+            renderPhaseDetails();
+            updateOverallProgress();
+        }
+
+        // Initialize the dashboard
+        function init() {
+            updateOverallProgress();
+            renderPhaseList();
+            renderPhaseDetails();
+        }
+
+        // Start the app
+        init();
+    </script>
+</body>
+</html>
